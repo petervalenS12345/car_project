@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Cars</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="fw-bold">All Cars</h1>
+        <a href="{% url 'car_create' %}" class="btn btn-primary">+ Create New Car</a>
+    </div>
+
+    <!-- 🔽 Filter Form -->
+    <form method="get" class="mb-4">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label for="color" class="form-label mb-0 fw-semibold">Filter by Color:</label>
+            </div>
+            <div class="col-auto">
+                <select name="color" id="color" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Colors</option>
+                    {% for color in colors %}
+                        <option value="{{ color }}" {% if selected_color == color %}selected{% endif %}>{{ color }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </form>
+
+    <!-- 📋 Car Table -->
+    {% if cars %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Make</th>
+                        <th>Color</th>
+                        <th>Key</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for car in cars %}
+                    <tr>
+                        <td>{{ car.make }}</td>
+                        <td>{{ car.color }}</td>
+                        <td>{{ car.key }}</td>
+                       <td class="text-center">
+    <div class="d-inline-flex gap-2">
+        <a href="{% url 'car_edit' car.id %}" class="btn btn-sm btn-warning">Edit</a>
+        <a href="{% url 'car_delete' car.id %}" class="btn btn-sm btn-danger"
+           onclick="return confirm('Are you sure you want to delete this car?');">Delete</a>
+    </div>
+</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="text-muted">No cars found.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
