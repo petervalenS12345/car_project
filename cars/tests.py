@@ -33,13 +33,14 @@ class CarViewsTestCase(TestCase):
     def test_car_create_view_post(self):
         data = {
             'make': 'New Car',
-            'color': 'White',  # must match one of the COLOR_CHOICES
+            'color': 'White',
         }
         response = self.client.post(reverse('car_create'), data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('dashboard'))
 
         self.assertTrue(Car.objects.filter(make='New Car').exists())
+        self.assertTrue(Car.objects.filter(color='White').exists())
         new_car = Car.objects.get(make='New Car')
         self.assertEqual(new_car.key, 4.0)
 
